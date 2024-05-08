@@ -1,4 +1,5 @@
-import 'package:flashchat_medium/pages/home_page.dart';
+import 'package:flashchat_medium/ui/pages/home_page.dart';
+import 'package:flashchat_medium/ui/pages/registration_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -17,7 +18,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData.dark(),
       debugShowCheckedModeBanner: false,
-      home: const HomePage(),
+      home: const RegistrationPage(),
     );
   }
 }

@@ -1,4 +1,4 @@
-import 'package:flashchat_medium/constants/textstyles.dart';
+import 'package:flashchat_medium/ui/style/textstyles.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
