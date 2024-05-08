@@ -16,6 +16,7 @@ class _HomePageState extends State<HomePage> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Wrap(
               children: [
@@ -31,8 +32,34 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 50),
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 16),
-              child: Material(),
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: MaterialButton(
+                color: Colors.lightBlue,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30)),
+                onPressed: () {},
+                minWidth: 200,
+                height: 50,
+                child: Text(
+                  'Log In',
+                  style: TextStyles.button,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(15),
+              child: MaterialButton(
+                color: Colors.blue,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30)),
+                onPressed: () {},
+                minWidth: 200,
+                height: 50,
+                child: Text(
+                  'Register',
+                  style: TextStyles.button,
+                ),
+              ),
             )
           ],
         ),
