@@ -10,9 +10,10 @@ class RegistrationPage extends StatefulWidget {
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
-  final GlobalKey _formkey = GlobalKey<FormState>();
+  final _formkey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  bool isPassNotVisible = true;
 
   @override
   Widget build(BuildContext context) {
@@ -25,28 +26,73 @@ class _RegistrationPageState extends State<RegistrationPage> {
             children: [
               const Image(
                 image: AssetImage('images/logo.png'),
-                height: 200,
+                height: 150,
               ),
               const SizedBox(
-                height: 50,
+                height: 20,
+              ),
+              Text(
+                'REGISTRATION',
+                style: TextStyles.mlBold,
+              ),
+              const SizedBox(
+                height: 30,
               ),
               Form(
+                  key: _formkey,
                   child: Column(
-                key: _formkey,
-                children: [
-                  InputText(
-                    icon: Icons.email_outlined,
-                    controller: emailController,
-                    label: 'e mail',
-                    hint: 'input your e-mail',
-                  ),
-                  InputText(
-                    icon: Icons.lock_outline_rounded,
-                    controller: emailController,
-                    label: 'password',
-                  ),
-                ],
-              ))
+                    children: [
+                      InputText(
+                        icon: Icons.email_outlined,
+                        controller: emailController,
+                        label: 'e mail',
+                        hint: 'input your e-mail',
+                        isRequired: true,
+                      ),
+                      InputText(
+                        icon: Icons.lock_outline_rounded,
+                        controller: passwordController,
+                        label: 'password',
+                        hint: 'input your password',
+                        isRequired: true,
+                        isNotVisible: isPassNotVisible,
+                        suffix: RawMaterialButton(
+                          elevation: 3,
+                          constraints:
+                              const BoxConstraints(minWidth: 0, minHeight: 0),
+                          // minWidth: double.minPositive,
+                          // height: double.minPositive,
+                          padding: const EdgeInsets.all(5),
+                          shape: const CircleBorder(),
+                          onPressed: () => setState(() {
+                            isPassNotVisible = !isPassNotVisible;
+                          }),
+                          child: isPassNotVisible
+                              ? const Icon(Icons.disabled_visible)
+                              : const Icon(Icons.visibility),
+                        ),
+                      ),
+                      const SizedBox(height: 40),
+                      RawMaterialButton(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 15, horizontal: 30),
+                        fillColor: Colors.blue,
+                        splashColor: Colors.lightBlue,
+                        shape: const RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20))),
+                        onPressed: () {
+                          if (_formkey.currentState!.validate()) {
+                            print('work !!');
+                          }
+                        },
+                        child: Text(
+                          'Submit',
+                          style: TextStyles.m,
+                        ),
+                      )
+                    ],
+                  ))
             ],
           ),
         ),

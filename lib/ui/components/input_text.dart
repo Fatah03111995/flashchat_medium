@@ -5,10 +5,16 @@ class InputText extends StatelessWidget {
   final String label;
   final String? hint;
   final IconData icon;
+  final bool isRequired;
+  final bool isNotVisible;
   final TextEditingController controller;
+  final Widget? suffix;
 
   const InputText(
       {super.key,
+      this.suffix,
+      this.isRequired = false,
+      this.isNotVisible = false,
       required this.icon,
       required this.controller,
       required this.label,
@@ -19,15 +25,29 @@ class InputText extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
       child: TextFormField(
+        obscureText: isNotVisible,
+        validator: (value) {
+          if (isRequired) {
+            switch (value) {
+              case null || '':
+                return 'please fill the column !';
+              default:
+                return null;
+            }
+          } else {
+            return null;
+          }
+        },
         decoration: InputDecoration(
           label: Text(label),
           labelStyle: TextStyles.formLabel,
+          floatingLabelStyle: TextStyles.formLabel,
           hintText: hint,
           hintStyle: TextStyles.formHint,
           errorStyle: TextStyles.formErr,
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 15,
-            vertical: 10,
+            // vertical: 10,
           ),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
           focusedBorder: OutlineInputBorder(
@@ -40,6 +60,7 @@ class InputText extends StatelessWidget {
             size: 30,
             color: Colors.blue,
           ),
+          suffix: suffix,
         ),
         style: TextStyles.formVal,
         controller: controller,
