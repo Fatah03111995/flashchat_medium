@@ -60,8 +60,6 @@ class _LoginPageState extends State<LoginPage> {
                           elevation: 3,
                           constraints:
                               const BoxConstraints(minWidth: 0, minHeight: 0),
-                          // minWidth: double.minPositive,
-                          // height: double.minPositive,
                           padding: const EdgeInsets.all(5),
                           shape: const CircleBorder(),
                           onPressed: () => setState(() {

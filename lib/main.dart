@@ -1,3 +1,4 @@
+import 'package:flashchat_medium/ui/pages/chat_page.dart';
 import 'package:flashchat_medium/ui/pages/home_page.dart';
 import 'package:flashchat_medium/ui/pages/registration_page.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData.dark(),
       debugShowCheckedModeBanner: false,
-      home: const RegistrationPage(),
+      home: const ChatPage(),
     );
   }
 }
