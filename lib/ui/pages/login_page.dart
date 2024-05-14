@@ -1,6 +1,7 @@
 import 'package:flashchat_medium/ui/components/input_text.dart';
 import 'package:flashchat_medium/ui/style/textstyles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -11,7 +12,8 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage>
+    with SingleTickerProviderStateMixin {
   final _formkey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -19,16 +21,21 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    timeDilation = 3;
     return Scaffold(
+      backgroundColor: Colors.blueGrey.withOpacity(1),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Image(
-                image: AssetImage('images/logo.png'),
-                height: 150,
+              const Hero(
+                tag: 'logo',
+                child: Image(
+                  image: AssetImage('images/logo.png'),
+                  height: 150,
+                ),
               ),
               const SizedBox(
                 height: 20,

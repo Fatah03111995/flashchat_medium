@@ -18,7 +18,7 @@ class TextStyles {
   static TextStyle get xl => general.copyWith(fontSize: 60);
   static TextStyle get xlBold => xl.copyWith(fontWeight: FontWeight.bold);
 
-  static TextStyle get button => smBold.copyWith(color: Colors.white);
+  static TextStyle get button => mBold.copyWith(color: Colors.white);
 
   static TextStyle get formHint => sm.copyWith(
         color: Colors.grey.shade700.withOpacity(0.8),

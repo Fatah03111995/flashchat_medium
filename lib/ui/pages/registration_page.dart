@@ -1,6 +1,7 @@
 import 'package:flashchat_medium/ui/components/input_text.dart';
 import 'package:flashchat_medium/ui/style/textstyles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 class RegistrationPage extends StatefulWidget {
   const RegistrationPage({super.key});
@@ -19,6 +20,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   @override
   Widget build(BuildContext context) {
+    timeDilation = 3;
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -26,9 +28,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Image(
-                image: AssetImage('images/logo.png'),
-                height: 150,
+              const Hero(
+                tag: 'logo',
+                child: Image(
+                  image: AssetImage('images/logo.png'),
+                  height: 150,
+                ),
               ),
               const SizedBox(
                 height: 20,
