@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flashchat_medium/ui/pages/chat_page.dart';
 import 'package:flashchat_medium/ui/pages/home_page.dart';
 import 'package:flashchat_medium/ui/pages/login_page.dart';
@@ -20,9 +22,9 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
         theme: ThemeData.dark(),
         debugShowCheckedModeBanner: false,
-        home: const HomePage(),
+        home: HomePage(),
         routes: {
-          HomePage.id: (context) => const HomePage(),
+          HomePage.id: (context) => HomePage(),
           ChatPage.id: (context) => const ChatPage(),
           LoginPage.id: (context) => const LoginPage(),
           RegistrationPage.id: (context) => const RegistrationPage()
