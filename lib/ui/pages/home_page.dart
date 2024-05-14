@@ -1,8 +1,12 @@
+import 'package:flashchat_medium/ui/pages/login_page.dart';
+import 'package:flashchat_medium/ui/pages/registration_page.dart';
 import 'package:flashchat_medium/ui/style/textstyles.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  static String id = 'homepage/';
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -37,7 +41,9 @@ class _HomePageState extends State<HomePage> {
                 color: Colors.lightBlue,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30)),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, LoginPage.id);
+                },
                 minWidth: 200,
                 height: 50,
                 child: Text(
@@ -52,7 +58,9 @@ class _HomePageState extends State<HomePage> {
                 color: Colors.blue,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30)),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, RegistrationPage.id);
+                },
                 minWidth: 200,
                 height: 50,
                 child: Text(
