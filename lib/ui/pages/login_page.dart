@@ -22,6 +22,7 @@ class _LoginPageState extends State<LoginPage>
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool isPassNotVisible = true;
+  bool isLoading = false;
 
   void showSnackBar(String value) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(value)));
@@ -29,10 +30,8 @@ class _LoginPageState extends State<LoginPage>
 
   void getCurrentUser() {
     try {
-      final User? user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        Navigator.pushNamed(context, ChatPage.id);
-      }
+      final user = FirebaseAuth.instance.currentUser;
+      print(user);
     } catch (e) {
       print(e);
     }
@@ -69,8 +68,16 @@ class _LoginPageState extends State<LoginPage>
                 style: TextStyles.mlBold,
               ),
               const SizedBox(
-                height: 30,
+                height: 15,
               ),
+              isLoading
+                  ? CircularProgressIndicator(
+                      strokeWidth: 7,
+                      color: Colors.lightBlue[700],
+                    )
+                  : const SizedBox(
+                      height: 15,
+                    ),
               Form(
                   key: _formkey,
                   child: Column(
@@ -113,6 +120,9 @@ class _LoginPageState extends State<LoginPage>
                             borderRadius:
                                 BorderRadius.all(Radius.circular(20))),
                         onPressed: () async {
+                          setState(() {
+                            isLoading = true;
+                          });
                           if (_formkey.currentState!.validate()) {
                             try {
                               final credential = await FirebaseAuth.instance
@@ -120,6 +130,9 @@ class _LoginPageState extends State<LoginPage>
                                       email: emailController.value.text,
                                       password: passwordController.value.text);
                               print(credential);
+                              setState(() {
+                                isLoading = false;
+                              });
                               Navigator.pushNamed(context, ChatPage.id);
                             } on FirebaseAuthException catch (e) {
                               if (e.code == 'user-not-found') {

@@ -20,6 +20,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool isPassNotVisible = true;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +47,16 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 style: TextStyles.mlBold,
               ),
               const SizedBox(
-                height: 30,
+                height: 15,
               ),
+              isLoading
+                  ? CircularProgressIndicator(
+                      strokeWidth: 7,
+                      color: Colors.lightBlue[700],
+                    )
+                  : const SizedBox(
+                      height: 15,
+                    ),
               Form(
                   key: _formkey,
                   child: Column(
@@ -98,6 +107,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             borderRadius:
                                 BorderRadius.all(Radius.circular(20))),
                         onPressed: () async {
+                          setState(() {
+                            isLoading = true;
+                          });
                           if (_formkey.currentState!.validate()) {
                             final newUser =
                                 await _auth.createUserWithEmailAndPassword(
@@ -105,6 +117,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                     password: passwordController.value.text);
 
                             print(newUser);
+                            setState(() {
+                              isLoading = false;
+                            });
                             Navigator.pushNamed(context, LoginPage.id);
                           }
                         },
