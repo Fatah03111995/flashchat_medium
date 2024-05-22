@@ -15,12 +15,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
-  late AnimationController controller;
+  AnimationController? controller;
+  double value = 0;
+  late double ticker;
 
   @override
   void initState() {
     super.initState();
-    controller = AnimationController(
+    AnimationController controller = AnimationController(
       duration: const Duration(seconds: 1),
       vsync: this,
     );
@@ -36,21 +38,17 @@ class _HomePageState extends State<HomePage>
     });
 
     controller.addListener(() {
-      setState(() {});
+      setState(() {
+        value = animation.value;
+      });
     });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    controller.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     timeDilation = 3;
     return Scaffold(
-      backgroundColor: Colors.blueGrey.withOpacity(controller.value),
+      backgroundColor: Colors.blueGrey.withOpacity(value),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -112,5 +110,11 @@ class _HomePageState extends State<HomePage>
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    if (controller != null) controller!.dispose();
   }
 }

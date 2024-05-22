@@ -1,19 +1,11 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flashchat_medium/ui/pages/chat_page.dart';
 import 'package:flashchat_medium/ui/pages/home_page.dart';
 import 'package:flashchat_medium/ui/pages/login_page.dart';
 import 'package:flashchat_medium/ui/pages/registration_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+void main() {
   runApp(const MainApp());
 }
 
@@ -28,9 +20,9 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
         theme: ThemeData.dark(),
         debugShowCheckedModeBanner: false,
-        home: HomePage(),
+        home: const HomePage(),
         routes: {
-          HomePage.id: (context) => HomePage(),
+          HomePage.id: (context) => const HomePage(),
           ChatPage.id: (context) => const ChatPage(),
           LoginPage.id: (context) => const LoginPage(),
           RegistrationPage.id: (context) => const RegistrationPage()
