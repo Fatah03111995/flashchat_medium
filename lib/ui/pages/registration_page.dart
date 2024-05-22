@@ -1,7 +1,9 @@
 import 'package:flashchat_medium/ui/components/input_text.dart';
+import 'package:flashchat_medium/ui/pages/login_page.dart';
 import 'package:flashchat_medium/ui/style/textstyles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class RegistrationPage extends StatefulWidget {
   const RegistrationPage({super.key});
@@ -14,6 +16,7 @@ class RegistrationPage extends StatefulWidget {
 
 class _RegistrationPageState extends State<RegistrationPage> {
   final _formkey = GlobalKey<FormState>();
+  final _auth = FirebaseAuth.instance;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool isPassNotVisible = true;
@@ -54,15 +57,21 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         controller: emailController,
                         label: 'e mail',
                         hint: 'input your e-mail',
-                        isRequired: true,
+                        validator: InputText.validatorIsRequired,
                       ),
                       InputText(
                         icon: Icons.lock_outline_rounded,
                         controller: passwordController,
                         label: 'password',
                         hint: 'input your password',
-                        isRequired: true,
                         isNotVisible: isPassNotVisible,
+                        validator: (value) {
+                          if (value == null || value.length < 6) {
+                            return 'your password must contain min 6 character';
+                          } else {
+                            return null;
+                          }
+                        },
                         suffix: RawMaterialButton(
                           elevation: 3,
                           constraints:
@@ -88,9 +97,15 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         shape: const RoundedRectangleBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(20))),
-                        onPressed: () {
+                        onPressed: () async {
                           if (_formkey.currentState!.validate()) {
-                            print('work !!');
+                            final newUser =
+                                await _auth.createUserWithEmailAndPassword(
+                                    email: emailController.value.text,
+                                    password: passwordController.value.text);
+
+                            print(newUser);
+                            Navigator.pushNamed(context, LoginPage.id);
                           }
                         },
                         child: Text(

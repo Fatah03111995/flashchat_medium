@@ -5,20 +5,29 @@ class InputText extends StatelessWidget {
   final String label;
   final String? hint;
   final IconData icon;
-  final bool isRequired;
   final bool isNotVisible;
+  final String? Function(String?)? validator;
   final TextEditingController controller;
   final Widget? suffix;
 
   const InputText(
       {super.key,
       this.suffix,
-      this.isRequired = false,
       this.isNotVisible = false,
       required this.icon,
       required this.controller,
       required this.label,
-      this.hint});
+      this.hint,
+      this.validator});
+
+  static String? validatorIsRequired(String? value) {
+    switch (value) {
+      case null || '':
+        return 'please fill the column !';
+      default:
+        return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,18 +35,7 @@ class InputText extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 12),
       child: TextFormField(
         obscureText: isNotVisible,
-        validator: (value) {
-          if (isRequired) {
-            switch (value) {
-              case null || '':
-                return 'please fill the column !';
-              default:
-                return null;
-            }
-          } else {
-            return null;
-          }
-        },
+        validator: validator,
         decoration: InputDecoration(
           label: Text(label),
           labelStyle: TextStyles.formLabel,

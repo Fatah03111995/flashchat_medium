@@ -1,4 +1,8 @@
+// ignore_for_file: avoid_print
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flashchat_medium/ui/components/input_text.dart';
+import 'package:flashchat_medium/ui/pages/chat_page.dart';
 import 'package:flashchat_medium/ui/style/textstyles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -23,7 +27,6 @@ class _LoginPageState extends State<LoginPage>
   Widget build(BuildContext context) {
     timeDilation = 3;
     return Scaffold(
-      backgroundColor: Colors.blueGrey.withOpacity(1),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Center(
@@ -56,14 +59,14 @@ class _LoginPageState extends State<LoginPage>
                         controller: emailController,
                         label: 'e mail',
                         hint: 'input your e-mail',
-                        isRequired: true,
+                        validator: InputText.validatorIsRequired,
                       ),
                       InputText(
                         icon: Icons.lock_outline_rounded,
                         controller: passwordController,
                         label: 'password',
                         hint: 'input your password',
-                        isRequired: true,
+                        validator: InputText.validatorIsRequired,
                         isNotVisible: isPassNotVisible,
                         suffix: RawMaterialButton(
                           elevation: 3,
@@ -88,9 +91,26 @@ class _LoginPageState extends State<LoginPage>
                         shape: const RoundedRectangleBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(20))),
-                        onPressed: () {
+                        onPressed: () async {
                           if (_formkey.currentState!.validate()) {
-                            print('work !!');
+                            try {
+                              final credential = await FirebaseAuth.instance
+                                  .signInWithEmailAndPassword(
+                                      email: emailController.value.text,
+                                      password: passwordController.value.text);
+                              print(credential);
+                              Navigator.pushNamed(context, ChatPage.id);
+                            } on FirebaseAuthException catch (e) {
+                              if (e.code == 'user-not-found') {
+                                print('no user found');
+                              } else if (e.code == 'wrong-password') {
+                                print('wrong pass');
+                              } else {
+                                print(e);
+                              }
+                            } on Exception catch (e) {
+                              print(e);
+                            }
                           }
                         },
                         child: Text(

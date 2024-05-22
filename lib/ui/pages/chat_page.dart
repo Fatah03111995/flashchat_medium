@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flashchat_medium/core/constants/constant.dart';
 import 'package:flashchat_medium/ui/style/textstyles.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,27 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
+  final _auth = FirebaseAuth.instance;
+  User? loggedinUser;
+
+  void getCurrentUser() {
+    try {
+      final User? user = _auth.currentUser;
+      if (user != null) {
+        loggedinUser = user;
+        print(loggedinUser);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getCurrentUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
