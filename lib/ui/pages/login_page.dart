@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flashchat_medium/ui/components/input_text.dart';
@@ -22,6 +22,27 @@ class _LoginPageState extends State<LoginPage>
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool isPassNotVisible = true;
+
+  void showSnackBar(String value) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(value)));
+  }
+
+  void getCurrentUser() {
+    try {
+      final User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        Navigator.pushNamed(context, ChatPage.id);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getCurrentUser();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,13 +123,17 @@ class _LoginPageState extends State<LoginPage>
                               Navigator.pushNamed(context, ChatPage.id);
                             } on FirebaseAuthException catch (e) {
                               if (e.code == 'user-not-found') {
+                                showSnackBar('user not found');
                                 print('no user found');
                               } else if (e.code == 'wrong-password') {
+                                showSnackBar('Wrong Password');
                                 print('wrong pass');
                               } else {
+                                showSnackBar('Something Wrong');
                                 print(e);
                               }
-                            } on Exception catch (e) {
+                            } catch (e) {
+                              showSnackBar('Error');
                               print(e);
                             }
                           }
