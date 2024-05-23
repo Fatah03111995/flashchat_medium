@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+String messageCollectionPath = 'messages';
+
 const kMessageTextFieldDecoration = InputDecoration(
   contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
   hintText: 'Type your message here...',

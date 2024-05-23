@@ -1,6 +1,4 @@
-// ignore_for_file: avoid_print, use_build_context_synchronously
-
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flashchat_medium/core/user_connection.dart';
 import 'package:flashchat_medium/ui/components/input_text.dart';
 import 'package:flashchat_medium/ui/pages/chat_page.dart';
 import 'package:flashchat_medium/ui/style/textstyles.dart';
@@ -16,35 +14,21 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage>
-    with SingleTickerProviderStateMixin {
+class _LoginPageState extends State<LoginPage> {
   final _formkey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool isPassNotVisible = true;
   bool isLoading = false;
 
-  void showSnackBar(String value) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(value)));
-  }
-
-  void getCurrentUser() {
-    try {
-      final user = FirebaseAuth.instance.currentUser;
-      print(user);
-    } catch (e) {
-      print(e);
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-    getCurrentUser();
   }
 
   @override
   Widget build(BuildContext context) {
+    final thisContext = context;
     timeDilation = 3;
     return Scaffold(
       body: Padding(
@@ -124,30 +108,18 @@ class _LoginPageState extends State<LoginPage>
                             isLoading = true;
                           });
                           if (_formkey.currentState!.validate()) {
-                            try {
-                              final credential = await FirebaseAuth.instance
-                                  .signInWithEmailAndPassword(
-                                      email: emailController.value.text,
-                                      password: passwordController.value.text);
-                              print(credential);
-                              setState(() {
-                                isLoading = false;
-                              });
-                              Navigator.pushNamed(context, ChatPage.id);
-                            } on FirebaseAuthException catch (e) {
-                              if (e.code == 'user-not-found') {
-                                showSnackBar('user not found');
-                                print('no user found');
-                              } else if (e.code == 'wrong-password') {
-                                showSnackBar('Wrong Password');
-                                print('wrong pass');
-                              } else {
-                                showSnackBar('Something Wrong');
-                                print(e);
+                            final user = await UserConnection().logIn(
+                              email: emailController.value.text,
+                              password: passwordController.value.text,
+                              context: context,
+                            );
+                            setState(() {
+                              isLoading = false;
+                            });
+                            if (user != null) {
+                              if (context.mounted) {
+                                Navigator.pushNamed(thisContext, ChatPage.id);
                               }
-                            } catch (e) {
-                              showSnackBar('Error');
-                              print(e);
                             }
                           }
                         },

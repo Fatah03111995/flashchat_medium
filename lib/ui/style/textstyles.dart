@@ -26,4 +26,6 @@ class TextStyles {
   static TextStyle get formErr => smBold.copyWith(color: Colors.red);
   static TextStyle get formLabel => mBold.copyWith(color: Colors.blue);
   static TextStyle get formVal => m.copyWith(color: Colors.blue);
+
+  static TextStyle get errSnackbar => m.copyWith(color: Colors.red[700]);
 }

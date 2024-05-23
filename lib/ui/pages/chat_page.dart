@@ -1,3 +1,6 @@
+// ignore_for_file: avoid_print
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flashchat_medium/core/constants/constant.dart';
 import 'package:flashchat_medium/ui/style/textstyles.dart';
@@ -13,8 +16,10 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
+  final _firestore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
   User? loggedinUser;
+  String messageText = '';
 
   void getCurrentUser() {
     try {
@@ -23,8 +28,24 @@ class _ChatPageState extends State<ChatPage> {
         loggedinUser = user;
         print(loggedinUser);
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
+      debugPrintStack(stackTrace: stackTrace);
       print(e);
+    }
+  }
+
+  // void getMessages() async {
+  //   final messages = await _firestore.collection('messages').get();
+  //   for (var message in messages.docs) {
+  //     print(message.data());
+  //   }
+  // }
+
+  void getMessagesStream() async {
+    await for (var snapshot in _firestore.collection('messages').snapshots()) {
+      for (var message in snapshot.docs) {
+        print(message.data());
+      }
     }
   }
 
@@ -32,6 +53,7 @@ class _ChatPageState extends State<ChatPage> {
   void initState() {
     super.initState();
     getCurrentUser();
+    getMessagesStream();
   }
 
   @override
@@ -39,13 +61,21 @@ class _ChatPageState extends State<ChatPage> {
     return Scaffold(
       appBar: AppBar(
         leading: null,
+        automaticallyImplyLeading: false,
         title: Text(
           '⚡️Chat',
           style: TextStyles.mlBold,
         ),
         centerTitle: true,
         backgroundColor: Colors.lightBlueAccent,
-        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.close))],
+        actions: [
+          IconButton(
+              onPressed: () {
+                _auth.signOut();
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.close))
+        ],
       ),
       body: SafeArea(
           child: Column(
@@ -55,13 +85,18 @@ class _ChatPageState extends State<ChatPage> {
           Expanded(
             child: TextField(
               onChanged: (value) {
-                //Do something with the user input.
+                messageText = value;
               },
               decoration: kMessageTextFieldDecoration,
             ),
           ),
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              _firestore.collection('messages').add({
+                'text': messageText,
+                'sender': loggedinUser?.email,
+              });
+            },
             child: const Text(
               'Send',
               style: kSendButtonTextStyle,
