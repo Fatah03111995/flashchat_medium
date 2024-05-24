@@ -1,15 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flashchat_medium/core/constants/constant.dart';
 import 'package:flashchat_medium/ui/components/util_component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class UserConnection {
   final _auth = FirebaseAuth.instance;
-  final _fireStore = FirebaseFirestore.instance;
 
   Future<Map<String, dynamic>?> logIn({
     required String email,
@@ -90,10 +87,13 @@ class UserConnection {
     }
     return null;
   }
+// --------------- END SIGN IN
 
-  void sendMessage({required String text, required String? sender}) {
-    _fireStore
-        .collection(messageCollectionPath)
-        .add({'text': text, 'sender': sender});
+  User? getCurrentUser() {
+    final user = _auth.currentUser;
+    if (user != null) {
+      return user;
+    }
+    return null;
   }
 }

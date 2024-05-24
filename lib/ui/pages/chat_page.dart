@@ -1,8 +1,8 @@
 // ignore_for_file: avoid_print
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flashchat_medium/core/constants/constant.dart';
+import 'package:flashchat_medium/core/message_db.dart';
 import 'package:flashchat_medium/core/user_connection.dart';
 import 'package:flashchat_medium/ui/style/textstyles.dart';
 import 'package:flutter/material.dart';
@@ -17,18 +17,16 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  final _firestore = FirebaseFirestore.instance;
-  final _auth = FirebaseAuth.instance;
   User? loggedinUser;
   String messageText = '';
 
   void getCurrentUser() {
     try {
-      final User? user = _auth.currentUser;
+      final User? user = UserConnection().getCurrentUser();
       if (user != null) {
         loggedinUser = user;
-        print(loggedinUser);
       }
+      Navigator.pop(context);
     } catch (e, stackTrace) {
       debugPrintStack(stackTrace: stackTrace);
       print(e);
@@ -93,7 +91,7 @@ class _ChatPageState extends State<ChatPage> {
           ),
           TextButton(
             onPressed: () {
-              UserConnection()
+              MessageDb()
                   .sendMessage(text: messageText, sender: loggedinUser?.email);
             },
             child: const Text(

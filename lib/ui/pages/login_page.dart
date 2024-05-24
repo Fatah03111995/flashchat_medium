@@ -24,6 +24,9 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+    if (UserConnection().getCurrentUser() != null) {
+      Navigator.pushNamed(context, ChatPage.id);
+    }
   }
 
   @override
@@ -117,8 +120,6 @@ class _LoginPageState extends State<LoginPage> {
                             if (response != null) {
                               if (context.mounted) {
                                 setState(() => isLoading = false);
-
-                                print(response);
                                 Navigator.pushNamed(thisContext, ChatPage.id);
                               }
                             }
