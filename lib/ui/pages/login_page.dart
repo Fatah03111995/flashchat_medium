@@ -24,9 +24,10 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    if (UserConnection().getCurrentUser() != null) {
-      Navigator.pushNamed(context, ChatPage.id);
-    }
+    // TODO next development, give condition if user has been login send to chat page
+    // if (UserConnection().getCurrentUser() != null) {
+    //   Navigator.pushNamed(context, ChatPage.id);
+    // }
   }
 
   @override

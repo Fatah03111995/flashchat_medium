@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flashchat_medium/firebase_options.dart';
 import 'package:flashchat_medium/ui/pages/chat_page.dart';
@@ -30,8 +32,8 @@ class MainApp extends StatelessWidget {
         home: const HomePage(),
         routes: {
           HomePage.id: (context) => const HomePage(),
-          ChatPage.id: (context) => const ChatPage(),
-          LoginPage.id: (context) => const LoginPage(),
+          ChatPage.id: (context) => ChatPage(),
+          LoginPage.id: (context) => LoginPage(),
           RegistrationPage.id: (context) => const RegistrationPage()
         });
   }

@@ -1,5 +1,8 @@
 // ignore_for_file: avoid_print
 
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flashchat_medium/core/constants/constant.dart';
 import 'package:flashchat_medium/core/message_db.dart';
@@ -19,30 +22,26 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   User? loggedinUser;
   String messageText = '';
+  Stream<List<Map<String, dynamic>>>? messages;
 
   void getCurrentUser() {
     try {
       final User? user = UserConnection().getCurrentUser();
       if (user != null) {
         loggedinUser = user;
+      } else {
+        Navigator.pop(context);
       }
-      Navigator.pop(context);
     } catch (e, stackTrace) {
       debugPrintStack(stackTrace: stackTrace);
       print(e);
     }
   }
 
-  // void getMessages() async {
-  //   final messages = await _firestore.collection('messages').get();
-  //   for (var message in messages.docs) {
-  //     print(message.data());
-  //   }
-  // }
-
-  void getMessagesStream() async {
-    await for (var snapshot in _firestore.collection('messages').snapshots()) {
-      for (var message in snapshot.docs) {
+  void getStreamMessage() async {
+    await for (var snapshots
+        in FirebaseFirestore.instance.collection('messages').snapshots()) {
+      for (var message in snapshots.docs) {
         print(message.data());
       }
     }
@@ -52,7 +51,6 @@ class _ChatPageState extends State<ChatPage> {
   void initState() {
     super.initState();
     getCurrentUser();
-    getMessagesStream();
   }
 
   @override
@@ -69,9 +67,8 @@ class _ChatPageState extends State<ChatPage> {
         backgroundColor: Colors.lightBlueAccent,
         actions: [
           IconButton(
-              onPressed: () {
-                UserConnection().logOut();
-                Navigator.pop(context);
+              onPressed: () async {
+                getStreamMessage();
               },
               icon: const Icon(Icons.close))
         ],
@@ -81,6 +78,24 @@ class _ChatPageState extends State<ChatPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          StreamBuilder(
+              stream: MessageDb.streamMessage,
+              builder: (context, snapshot) {
+                List<Widget> messagesWidget = [];
+                if (snapshot.hasData) {
+                  final messages = snapshot.data!.docs;
+                  for (var message in messages) {
+                    final messageText = message.data()['text'];
+                    final messageSender = message.data()['sender'];
+                    final messageWidget =
+                        Text('$messageText from $messageSender');
+                    messagesWidget.add(messageWidget);
+                  }
+                }
+                return Column(
+                  children: messagesWidget,
+                );
+              }),
           Expanded(
             child: TextField(
               onChanged: (value) {
