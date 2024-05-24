@@ -93,10 +93,8 @@ class _ChatPageState extends State<ChatPage> {
           ),
           TextButton(
             onPressed: () {
-              _firestore.collection('messages').add({
-                'text': messageText,
-                'sender': loggedinUser?.email,
-              });
+              UserConnection()
+                  .sendMessage(text: messageText, sender: loggedinUser?.email);
             },
             child: const Text(
               'Send',
