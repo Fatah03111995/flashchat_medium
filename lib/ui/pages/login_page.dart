@@ -104,23 +104,25 @@ class _LoginPageState extends State<LoginPage> {
                             borderRadius:
                                 BorderRadius.all(Radius.circular(20))),
                         onPressed: () async {
-                          setState(() {
-                            isLoading = true;
-                          });
                           if (_formkey.currentState!.validate()) {
-                            final user = await UserConnection().logIn(
+                            setState(() => isLoading = true);
+
+                            final response = await UserConnection().logIn(
                               email: emailController.value.text,
                               password: passwordController.value.text,
                               context: context,
                             );
-                            setState(() {
-                              isLoading = false;
-                            });
-                            if (user != null) {
+                            emailController.clear();
+                            passwordController.clear();
+                            if (response != null) {
                               if (context.mounted) {
+                                setState(() => isLoading = false);
+
+                                print(response);
                                 Navigator.pushNamed(thisContext, ChatPage.id);
                               }
                             }
+                            setState(() => isLoading = false);
                           }
                         },
                         child: Text(

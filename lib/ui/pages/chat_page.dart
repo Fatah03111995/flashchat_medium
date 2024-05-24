@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flashchat_medium/core/constants/constant.dart';
+import 'package:flashchat_medium/core/user_connection.dart';
 import 'package:flashchat_medium/ui/style/textstyles.dart';
 import 'package:flutter/material.dart';
 
@@ -71,7 +72,7 @@ class _ChatPageState extends State<ChatPage> {
         actions: [
           IconButton(
               onPressed: () {
-                _auth.signOut();
+                UserConnection().logOut();
                 Navigator.pop(context);
               },
               icon: const Icon(Icons.close))

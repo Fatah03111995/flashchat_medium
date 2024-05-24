@@ -1,9 +1,9 @@
+import 'package:flashchat_medium/core/user_connection.dart';
 import 'package:flashchat_medium/ui/components/input_text.dart';
 import 'package:flashchat_medium/ui/pages/login_page.dart';
 import 'package:flashchat_medium/ui/style/textstyles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class RegistrationPage extends StatefulWidget {
   const RegistrationPage({super.key});
@@ -16,7 +16,6 @@ class RegistrationPage extends StatefulWidget {
 
 class _RegistrationPageState extends State<RegistrationPage> {
   final _formkey = GlobalKey<FormState>();
-  final _auth = FirebaseAuth.instance;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool isPassNotVisible = true;
@@ -107,20 +106,22 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             borderRadius:
                                 BorderRadius.all(Radius.circular(20))),
                         onPressed: () async {
-                          setState(() {
-                            isLoading = true;
-                          });
                           if (_formkey.currentState!.validate()) {
-                            final newUser =
-                                await _auth.createUserWithEmailAndPassword(
-                                    email: emailController.value.text,
-                                    password: passwordController.value.text);
+                            setState(() => isLoading = true);
 
-                            print(newUser);
-                            setState(() {
-                              isLoading = false;
-                            });
-                            Navigator.pushNamed(context, LoginPage.id);
+                            final newUser = await UserConnection().signIn(
+                              context: context,
+                              email: emailController.value.text,
+                              password: passwordController.value.text,
+                            );
+
+                            if (newUser != null) {
+                              if (context.mounted) {
+                                setState(() => isLoading = false);
+                                Navigator.pushNamed(context, LoginPage.id);
+                              }
+                            }
+                            setState(() => isLoading = false);
                           }
                         },
                         child: Text(
