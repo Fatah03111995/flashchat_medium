@@ -14,6 +14,7 @@ class UtilComponent {
   }
 
   static void showSnackBarSuccess(BuildContext context, String value) {
+    if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(
         value,

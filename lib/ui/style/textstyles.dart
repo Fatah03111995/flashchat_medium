@@ -29,4 +29,7 @@ class TextStyles {
 
   static TextStyle get errSnackbar => m.copyWith(color: Colors.red[700]);
   static TextStyle get successSnackbar => m.copyWith(color: Colors.green[700]);
+
+  static TextStyle get senderBubble => sm.copyWith(color: Colors.grey[200]);
+  static TextStyle get textBubble => m.copyWith(color: Colors.white);
 }
