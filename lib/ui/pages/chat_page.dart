@@ -86,13 +86,21 @@ class _ChatPageState extends State<ChatPage> {
                       final messageData = message.data();
                       final String messageText = messageData['text'] ?? '';
                       final String messageSender = messageData['sender'] ?? '';
-                      final messageWidget =
-                          BubbleChat(sender: messageSender, text: messageText);
+                      final DateTime messageDate =
+                          DateTime.fromMicrosecondsSinceEpoch(
+                              messageData['date']);
+                      final messageWidget = BubbleChat(
+                        sender: messageSender,
+                        text: messageText,
+                        dateTime: messageDate,
+                        isMe: messageSender == loggedinUser!.email,
+                      );
                       messagesWidget.add(messageWidget);
                     }
                   }
                   return Expanded(
                     child: ListView(
+                      reverse: true,
                       children: messagesWidget,
                     ),
                   );
@@ -113,9 +121,6 @@ class _ChatPageState extends State<ChatPage> {
                     onPressed: () {
                       MessageDb().sendMessage(
                           text: messageText, sender: loggedinUser?.email);
-                      setState(() {
-                        messageText = '';
-                      });
                     },
                     child: const Text(
                       'Send',

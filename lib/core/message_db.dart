@@ -5,12 +5,17 @@ class MessageDb {
   final _fireStore = FirebaseFirestore.instance;
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> get streamMessage =>
-      FirebaseFirestore.instance.collection(messageCollectionPath).snapshots();
+      FirebaseFirestore.instance
+          .collection(messageCollectionPath)
+          .orderBy('date')
+          .snapshots();
 
   void sendMessage({required String text, required String? sender}) {
-    _fireStore
-        .collection(messageCollectionPath)
-        .add({'text': text, 'sender': sender});
+    _fireStore.collection(messageCollectionPath).add({
+      'text': text,
+      'sender': sender,
+      'date': DateTime.now().microsecondsSinceEpoch
+    });
   }
 
   Future<List<Map<String, dynamic>>> getMessages() async {

@@ -31,5 +31,7 @@ class TextStyles {
   static TextStyle get successSnackbar => m.copyWith(color: Colors.green[700]);
 
   static TextStyle get senderBubble => sm.copyWith(color: Colors.grey[200]);
+  static TextStyle get dateBubble => sm.copyWith(color: Colors.grey[200]);
   static TextStyle get textBubble => m.copyWith(color: Colors.white);
+  static TextStyle get textBubbleIsMe => m.copyWith(color: Colors.black);
 }
